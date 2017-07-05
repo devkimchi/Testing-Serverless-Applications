@@ -28,6 +28,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Functions.Tests", "t
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Services.Tests", "test\Sample.Services.Tests\Sample.Services.Tests.csproj", "{5D41AF51-6A2E-4C04-959E-F307ECA49641}"
 EndProject
+Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "Sample.Workflows", "src\Sample.Workflows\Sample.Workflows.deployproj", "{321711B7-6075-4F96-B5EF-12C9CF64CD88}"
+EndProject
+Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "Sample.Workflows.Tests", "test\Sample.Workflows.Tests\Sample.Workflows.Tests.deployproj", "{525C56AE-15AA-474A-8CC2-E4E9630EC314}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,6 +62,14 @@ Global
 		{5D41AF51-6A2E-4C04-959E-F307ECA49641}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D41AF51-6A2E-4C04-959E-F307ECA49641}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D41AF51-6A2E-4C04-959E-F307ECA49641}.Release|Any CPU.Build.0 = Release|Any CPU
+		{321711B7-6075-4F96-B5EF-12C9CF64CD88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{321711B7-6075-4F96-B5EF-12C9CF64CD88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{321711B7-6075-4F96-B5EF-12C9CF64CD88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{321711B7-6075-4F96-B5EF-12C9CF64CD88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{525C56AE-15AA-474A-8CC2-E4E9630EC314}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{525C56AE-15AA-474A-8CC2-E4E9630EC314}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{525C56AE-15AA-474A-8CC2-E4E9630EC314}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{525C56AE-15AA-474A-8CC2-E4E9630EC314}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,5 +81,7 @@ Global
 		{BD06D50B-E427-4E60-ADD8-CDF5BFEA7506} = {9EA19EE3-A8EB-4738-97C2-613F8557C26F}
 		{2296B871-2BD2-453B-982E-22B7F40E9496} = {9EA19EE3-A8EB-4738-97C2-613F8557C26F}
 		{5D41AF51-6A2E-4C04-959E-F307ECA49641} = {9EA19EE3-A8EB-4738-97C2-613F8557C26F}
+		{321711B7-6075-4F96-B5EF-12C9CF64CD88} = {C7555045-300C-408B-A291-1AC1F23004E5}
+		{525C56AE-15AA-474A-8CC2-E4E9630EC314} = {9EA19EE3-A8EB-4738-97C2-613F8557C26F}
 	EndGlobalSection
 EndGlobal
