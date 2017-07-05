@@ -5,11 +5,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BD06D50B-E427-4E60-ADD8-CDF5BFEA7506}</ProjectGuid>
+    <ProjectGuid>{6E2504B5-E4DF-4B7C-995A-63B2DA9437D4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sample.FunctionApp.Tests</RootNamespace>
-    <AssemblyName>Sample.FunctionApp.Tests</AssemblyName>
+    <RootNamespace>Sample.Extensions.Tests</RootNamespace>
+    <AssemblyName>Sample.Extensions.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
@@ -67,10 +67,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GenericExtensionsTests.cs" />
+    <Compile Include="Int32ExtensionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StringExtensionsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Sample.Extensions\Sample.Extensions.csproj">
+      <Project>{4fdfe53f-1edd-4969-9cae-53e8f998d72a}</Project>
+      <Name>Sample.Extensions</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

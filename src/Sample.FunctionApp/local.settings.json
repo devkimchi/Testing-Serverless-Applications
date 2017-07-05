@@ -1,0 +1,14 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsDashboard": "",
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+
+    "GithubApiBaseUri": "https://api.github.com/",
+    "GitHubRepositoryContentUri": "repos/{0}/{1}/contents",
+    "GitHubAzureUsername": "Azure",
+    "GitHubAzureQuickstartTemplatesRepository": "azure-quickstart-templates"
+  },
+  "ConnectionStrings": {
+  }
+}
