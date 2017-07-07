@@ -276,7 +276,7 @@ namespace Sample.Functions.FunctionFactories
         /// <returns>The response.</returns>
         protected HttpResponseMessage CreateResponse<T>(HttpRequestMessage req, HttpStatusCode statusCode, T value)
         {
-            var formatter = this.ServiceLocator.GetInstance<JsonMediaTypeFormatter>();
+            var formatter = this.ServiceLocator.GetInstance<MediaTypeFormatter>();
 
             return req.CreateResponse(statusCode, value, formatter);
         }

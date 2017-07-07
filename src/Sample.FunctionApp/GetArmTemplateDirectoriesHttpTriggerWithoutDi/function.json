@@ -2,14 +2,14 @@
   "disabled": false,
 
   "scriptFile": "..\\bin\\Sample.FunctionApp.dll",
-  "entryPoint": "Sample.FunctionApp.GetArmTemplateDirectoriesHttpTrigger.Run",
+  "entryPoint": "Sample.FunctionApp.GetArmTemplateDirectoriesHttpTriggerWithoutDi.Run",
 
   "bindings": [
     {
       "name": "req",
       "type": "httpTrigger",
       "direction": "in",
-      "route": "templates",
+      "route": "templates/di",
       "authLevel": "function",
       "methods": [
         "get"

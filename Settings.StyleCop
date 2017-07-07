@@ -2,7 +2,13 @@
   <GlobalSettings>
     <CollectionProperty Name="RecognizedWords">
       <Value>callback</Value>
+      <Value>dev</Value>
+      <Value>di</Value>
       <Value>enums</Value>
+      <Value>github</Value>
+      <Value>querystring</Value>
+      <Value>serilog</Value>
+      <Value>serilog-extensions-logging</Value>
     </CollectionProperty>
     <StringProperty Name="Culture">en-GB</StringProperty>
   </GlobalSettings>
