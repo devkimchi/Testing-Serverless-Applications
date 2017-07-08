@@ -82,7 +82,7 @@
                 "method": "GET",
                 "uri": "@{triggerBody()?['functionAppEndpointUri']}?q=@{triggerBody()?['query']}",
                 "headers": {
-                  "x-functions-ke": "@{triggerBody()?['functionAppKey']}"
+                  "x-functions-key": "@{triggerBody()?['functionAppKey']}"
                 }
               }
             },

@@ -19,7 +19,7 @@ namespace Sample.FunctionApp
         /// <returns>Returns the <see cref="HttpResponseMessage"/> instance.</returns>
         public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, ILogger log)
         {
-            return req.CreateResponse(HttpStatusCode.InternalServerError);
+            return req.CreateResponse(HttpStatusCode.BadRequest);
         }
     }
 }
