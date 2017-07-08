@@ -15,3 +15,4 @@ publish.ignore
 
 Web*.config
 packages.config
+local.settings.json
