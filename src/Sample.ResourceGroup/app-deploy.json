@@ -1,0 +1,151 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appServicePlanName": {
+      "type": "string",
+      "metadata": {
+        "description": "App service plan for Azure Functions"
+      }
+    },
+    "functionAppName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of Azure Functions"
+      }
+    },
+    "functionAppStorageAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of Storage Account for Azure Functions"
+      }
+    },
+    "functionAppStorageAccountType": {
+      "type": "string",
+      "allowedValues": [
+        "Standard_LRS",
+        "Standard_GRS",
+        "Standard_ZRS",
+        "Premium_LRS"
+      ],
+      "defaultValue": "Standard_LRS",
+      "metadata": {
+        "description": "The type of the storage account for the function app."
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "allowedValues": [
+        "[resourceGroup().location]",
+        "australiaeast",
+        "australiasoutheast",
+        "brazilsouth",
+        "centralus",
+        "eastasia",
+        "eastus",
+        "eastus2",
+        "japaneast",
+        "japanwest",
+        "northcentralus",
+        "northeurope",
+        "southcentralus",
+        "southeastasia",
+        "westeurope",
+        "westus"
+      ],
+      "metadata": {
+        "description": "Location of the Logic App."
+      }
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "apiVersion": "2016-09-01",
+      "type": "Microsoft.Web/serverfarms",
+      "name": "[parameters('appServicePlanName')]",
+      "location": "[parameters('location')]",
+      "kind": "functionapp",
+      "tags": {
+        "displayName": "[parameters('appServicePlanName')]"
+      },
+      "properties": {
+        "name": "[parameters('appServicePlanName')]"
+      },
+      "sku": {
+        "name": "Y1",
+        "capacity": 0
+      }
+    },
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[parameters('functionAppStorageAccountName')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "displayName": "[parameters('functionAppStorageAccountName')]"
+      },
+      "properties": {
+        "accountType": "[parameters('functionAppStorageAccountType')]"
+      }
+    },
+    {
+      "apiVersion": "2015-08-01",
+      "type": "Microsoft.Web/sites",
+      "name": "[parameters('functionAppName')]",
+      "location": "[resourceGroup().location]",
+      "kind": "functionapp",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('functionAppStorageAccountName'))]"
+      ],
+      "tags": {
+        "[concat('hidden-related:', resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName')))]": "Resource",
+        "displayName": "[parameters('functionAppName')]"
+      },
+      "properties": {
+        "clientAffinityEnabled": false,
+        "name": "[parameters('functionAppName')]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]"
+      },
+      "resources": [
+        {
+          "apiVersion": "2015-08-01",
+          "type": "config",
+          "name": "appsettings",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]",
+            "[resourceId('Microsoft.Storage/storageAccounts', parameters('functionAppStorageAccountName'))]"
+          ],
+          "properties": {
+            "AzureWebJobsDashboard": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('functionAppStorageAccountName'), ';AccountKey=', listkeys(resourceId('Microsoft.Storage/storageAccounts', parameters('functionAppStorageAccountName')), '2015-05-01-preview').key1, ';')]",
+            "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('functionAppStorageAccountName'), ';AccountKey=', listkeys(resourceId('Microsoft.Storage/storageAccounts', parameters('functionAppStorageAccountName')), '2015-05-01-preview').key1, ';')]",
+            "FUNCTIONS_EXTENSION_VERSION": "~1",
+            "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('functionAppStorageAccountName'), ';AccountKey=', listkeys(resourceId('Microsoft.Storage/storageAccounts', parameters('functionAppStorageAccountName')), '2015-05-01-preview').key1, ';')]",
+            "WEBSITE_CONTENTSHARE": "[concat(parameters('functionAppName'), '-contents')]",
+            "WEBSITE_NODE_DEFAULT_VERSION": "6.5.0",
+            "GithubApiBaseUri": "https://api.github.com/",
+            "GitHubRepositoryContentUri": "repos/{0}/{1}/contents",
+            "GitHubAzureUsername": "Azure",
+            "GitHubAzureQuickstartTemplatesRepository": "azure-quickstart-templates"
+          }
+        },
+        {
+          "apiVersion": "2015-08-01",
+          "type": "config",
+          "name": "web",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]"
+          ],
+          "properties": {
+            "remoteDebuggingEnabled": false,
+            "remoteDebuggingVersion": "VS2017",
+            "use32BitWorkerProcess": false
+          }
+        }
+      ]
+    }
+  ],
+  "outputs": {}
+}

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.14
+VisualStudioVersion = 15.0.26430.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C3BE00E6-488F-416E-9994-7D0E7D86A6BD}"
 	ProjectSection(SolutionItems) = preProject
@@ -37,6 +37,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Extensions", "src\Sample.Extensions\Sample.Extensions.csproj", "{4FDFE53F-1EDD-4969-9CAE-53E8F998D72A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Extensions.Tests", "test\Sample.Extensions.Tests\Sample.Extensions.Tests.csproj", "{6E2504B5-E4DF-4B7C-995A-63B2DA9437D4}"
+EndProject
+Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "Sample.ResourceGroup", "src\Sample.ResourceGroup\Sample.ResourceGroup.deployproj", "{0A43F750-3F36-4FA2-8D92-F817FBBE7147}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -88,6 +90,10 @@ Global
 		{6E2504B5-E4DF-4B7C-995A-63B2DA9437D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E2504B5-E4DF-4B7C-995A-63B2DA9437D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E2504B5-E4DF-4B7C-995A-63B2DA9437D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A43F750-3F36-4FA2-8D92-F817FBBE7147}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A43F750-3F36-4FA2-8D92-F817FBBE7147}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A43F750-3F36-4FA2-8D92-F817FBBE7147}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A43F750-3F36-4FA2-8D92-F817FBBE7147}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -104,5 +110,6 @@ Global
 		{FF597486-5CB1-40EA-A6C1-DECF129E0D96} = {C7555045-300C-408B-A291-1AC1F23004E5}
 		{4FDFE53F-1EDD-4969-9CAE-53E8F998D72A} = {C7555045-300C-408B-A291-1AC1F23004E5}
 		{6E2504B5-E4DF-4B7C-995A-63B2DA9437D4} = {9EA19EE3-A8EB-4738-97C2-613F8557C26F}
+		{0A43F750-3F36-4FA2-8D92-F817FBBE7147} = {C7555045-300C-408B-A291-1AC1F23004E5}
 	EndGlobalSection
 EndGlobal
