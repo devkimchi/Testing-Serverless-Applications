@@ -179,6 +179,9 @@
     <Content Include="local.settings.json" />
     <Content Include="GetArmTemplateDirectoriesHttpTriggerWithoutDi\function.json" />
     <Content Include="GetArmTemplateDirectoriesHttpTriggerWithServiceLocator\function.json" />
+    <Content Include="MockTemplateDirectoriesHttpTriggerOk\function.json" />
+    <Content Include="MockTemplateDirectoriesHttpTriggerError\function.json" />
+    <Content Include="MockTemplateDirectoriesHttpTriggerNotFound\function.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -193,6 +196,9 @@
     <Compile Include="GetArmTemplateDirectoriesHttpTriggerWithServiceLocator.cs" />
     <Compile Include="GetArmTemplateDirectoriesHttpTriggerWithoutDi.cs" />
     <Compile Include="GetArmTemplateDirectoriesHttpTrigger.cs" />
+    <Compile Include="MockTemplateDirectoriesHttpTriggerError.cs" />
+    <Compile Include="MockTemplateDirectoriesHttpTriggerNotFound.cs" />
+    <Compile Include="MockTemplateDirectoriesHttpTriggerOk.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

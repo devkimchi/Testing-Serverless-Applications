@@ -4,6 +4,12 @@
   "parameters": {
     "workflowName": {
       "value": "wf-github-template-directory"
+    },
+    "functionAppBaseUri": {
+      "value": "https://fn-github-template-directory.azurewebsites.net/api/mock/"
+    },
+    "functionAppKey": {
+      "value": ""
     }
   }
 }

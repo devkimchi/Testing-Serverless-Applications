@@ -34,6 +34,18 @@
       "metadata": {
         "description": "Location of the Logic App."
       }
+    },
+    "functionAppBaseUri": {
+      "type": "string",
+      "metadata": {
+        "description": "Base URI of Azure Functions for mocking"
+      }
+    },
+    "functionAppKey": {
+      "type": "string",
+      "metadata": {
+        "description": "API key of Azure Functions for mocking"
+      }
     }
   },
   "variables": {},
@@ -80,7 +92,7 @@
               "runAfter": {},
               "inputs": {
                 "method": "GET",
-                "uri": "https://functions.io/mock/github/templates/ok?code=xyz"
+                "uri": "[concat(parameters('functionAppBaseUri'), 'templates/ok?code=', parameters('functionAppKey'))]"
               }
             },
             "ErrorResponse": {
@@ -205,7 +217,7 @@
               "runAfter": {},
               "inputs": {
                 "method": "GET",
-                "uri": "https://functions.io/mock/github/templates/not-found?code=xyz"
+                "uri": "[concat(parameters('functionAppBaseUri'), 'templates/notfound?code=', parameters('functionAppKey'))]"
               }
             },
             "ErrorResponse": {
@@ -330,7 +342,7 @@
               "runAfter": {},
               "inputs": {
                 "method": "GET",
-                "uri": "https://functions.io/mock/github/templates/error?code=xyz"
+                "uri": "[concat(parameters('functionAppBaseUri'), 'templates/error?code=', parameters('functionAppKey'))]"
               }
             },
             "ErrorResponse": {
