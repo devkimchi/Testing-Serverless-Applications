@@ -22,7 +22,7 @@ namespace Sample.FunctionApp
         {
             var models = new List<object>();
 
-            return req.CreateResponse(HttpStatusCode.NotFound, models);
+            return req.CreateResponse(HttpStatusCode.OK, models);
         }
     }
 }
