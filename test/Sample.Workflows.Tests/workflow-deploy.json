@@ -1,0 +1,418 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "workflowName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "metadata": {
+        "description": "Name of the Logic App."
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "allowedValues": [
+        "[resourceGroup().location]",
+        "australiaeast",
+        "australiasoutheast",
+        "brazilsouth",
+        "centralus",
+        "eastasia",
+        "eastus",
+        "eastus2",
+        "japaneast",
+        "japanwest",
+        "northcentralus",
+        "northeurope",
+        "southcentralus",
+        "southeastasia",
+        "westeurope",
+        "westus"
+      ],
+      "metadata": {
+        "description": "Location of the Logic App."
+      }
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "name": "[concat(parameters('workflowName'), '-ok')]",
+      "type": "Microsoft.Logic/workflows",
+      "location": "[parameters('location')]",
+      "tags": {
+        "displayName": "[concat(parameters('workflowName'), '-ok')]"
+      },
+      "apiVersion": "2016-06-01",
+      "properties": {
+        "definition": {
+          "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+          "contentVersion": "1.0.0.0",
+          "parameters": {},
+          "triggers": {
+            "manual": {
+              "type": "Request",
+              "kind": "Http",
+              "inputs": {
+                "method": "POST",
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "functionAppEndpointUri": {
+                      "type": "string"
+                    },
+                    "functionAppKey": {
+                      "type": "string"
+                    },
+                    "query": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "actions": {
+            "HTTP": {
+              "type": "Http",
+              "runAfter": {},
+              "inputs": {
+                "method": "GET",
+                "uri": "https://functions.io/mock/github/templates/ok?code=xyz"
+              }
+            },
+            "ErrorResponse": {
+              "type": "Response",
+              "runAfter": {
+                "HTTP": [
+                  "Failed"
+                ]
+              },
+              "inputs": {
+                "statusCode": "@outputs('HTTP')['statusCode']",
+                "body": "@body('HTTP')"
+              }
+            },
+            "Parse_JSON": {
+              "type": "ParseJson",
+              "runAfter": {
+                "HTTP": [
+                  "Succeeded"
+                ]
+              },
+              "inputs": {
+                "content": "@body('HTTP')",
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "url": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "url"
+                    ]
+                  }
+                }
+              }
+            },
+            "Condition": {
+              "type": "If",
+              "runAfter": {
+                "Parse_JSON": [
+                  "Succeeded"
+                ]
+              },
+              "expression": "@greater(length(body('Parse_JSON')), 0)",
+              "actions": {
+                "OkResponse": {
+                  "type": "Response",
+                  "runAfter": {},
+                  "inputs": {
+                    "statusCode": 200,
+                    "body": "@body('Parse_JSON')"
+                  }
+                }
+              },
+              "else": {
+                "actions": {
+                  "NotFoundResponse": {
+                    "type": "Response",
+                    "runAfter": {},
+                    "inputs": {
+                      "statusCode": 404,
+                      "body": {
+                        "message": "Template not found"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "outputs": {}
+        },
+        "parameters": {}
+      }
+    },
+    {
+      "name": "[concat(parameters('workflowName'), '-notfound')]",
+      "type": "Microsoft.Logic/workflows",
+      "location": "[parameters('location')]",
+      "tags": {
+        "displayName": "[concat(parameters('workflowName'), '-notfound')]"
+      },
+      "apiVersion": "2016-06-01",
+      "properties": {
+        "definition": {
+          "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+          "contentVersion": "1.0.0.0",
+          "parameters": {},
+          "triggers": {
+            "manual": {
+              "type": "Request",
+              "kind": "Http",
+              "inputs": {
+                "method": "POST",
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "functionAppEndpointUri": {
+                      "type": "string"
+                    },
+                    "functionAppKey": {
+                      "type": "string"
+                    },
+                    "query": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "actions": {
+            "HTTP": {
+              "type": "Http",
+              "runAfter": {},
+              "inputs": {
+                "method": "GET",
+                "uri": "https://functions.io/mock/github/templates/not-found?code=xyz"
+              }
+            },
+            "ErrorResponse": {
+              "type": "Response",
+              "runAfter": {
+                "HTTP": [
+                  "Failed"
+                ]
+              },
+              "inputs": {
+                "statusCode": "@outputs('HTTP')['statusCode']",
+                "body": "@body('HTTP')"
+              }
+            },
+            "Parse_JSON": {
+              "type": "ParseJson",
+              "runAfter": {
+                "HTTP": [
+                  "Succeeded"
+                ]
+              },
+              "inputs": {
+                "content": "@body('HTTP')",
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "url": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "url"
+                    ]
+                  }
+                }
+              }
+            },
+            "Condition": {
+              "type": "If",
+              "runAfter": {
+                "Parse_JSON": [
+                  "Succeeded"
+                ]
+              },
+              "expression": "@greater(length(body('Parse_JSON')), 0)",
+              "actions": {
+                "OkResponse": {
+                  "type": "Response",
+                  "runAfter": {},
+                  "inputs": {
+                    "statusCode": 200,
+                    "body": "@body('Parse_JSON')"
+                  }
+                }
+              },
+              "else": {
+                "actions": {
+                  "NotFoundResponse": {
+                    "type": "Response",
+                    "runAfter": {},
+                    "inputs": {
+                      "statusCode": 404,
+                      "body": {
+                        "message": "Template not found"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "outputs": {}
+        },
+        "parameters": {}
+      }
+    },
+    {
+      "name": "[concat(parameters('workflowName'), '-error')]",
+      "type": "Microsoft.Logic/workflows",
+      "location": "[parameters('location')]",
+      "tags": {
+        "displayName": "[concat(parameters('workflowName'), '-error')]"
+      },
+      "apiVersion": "2016-06-01",
+      "properties": {
+        "definition": {
+          "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+          "contentVersion": "1.0.0.0",
+          "parameters": {},
+          "triggers": {
+            "manual": {
+              "type": "Request",
+              "kind": "Http",
+              "inputs": {
+                "method": "POST",
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "functionAppEndpointUri": {
+                      "type": "string"
+                    },
+                    "functionAppKey": {
+                      "type": "string"
+                    },
+                    "query": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "actions": {
+            "HTTP": {
+              "type": "Http",
+              "runAfter": {},
+              "inputs": {
+                "method": "GET",
+                "uri": "https://functions.io/mock/github/templates/error?code=xyz"
+              }
+            },
+            "ErrorResponse": {
+              "type": "Response",
+              "runAfter": {
+                "HTTP": [
+                  "Failed"
+                ]
+              },
+              "inputs": {
+                "statusCode": "@outputs('HTTP')['statusCode']",
+                "body": "@body('HTTP')"
+              }
+            },
+            "Parse_JSON": {
+              "type": "ParseJson",
+              "runAfter": {
+                "HTTP": [
+                  "Succeeded"
+                ]
+              },
+              "inputs": {
+                "content": "@body('HTTP')",
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "url": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "url"
+                    ]
+                  }
+                }
+              }
+            },
+            "Condition": {
+              "type": "If",
+              "runAfter": {
+                "Parse_JSON": [
+                  "Succeeded"
+                ]
+              },
+              "expression": "@greater(length(body('Parse_JSON')), 0)",
+              "actions": {
+                "OkResponse": {
+                  "type": "Response",
+                  "runAfter": {},
+                  "inputs": {
+                    "statusCode": 200,
+                    "body": "@body('Parse_JSON')"
+                  }
+                }
+              },
+              "else": {
+                "actions": {
+                  "NotFoundResponse": {
+                    "type": "Response",
+                    "runAfter": {},
+                    "inputs": {
+                      "statusCode": 404,
+                      "body": {
+                        "message": "Template not found"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "outputs": {}
+        },
+        "parameters": {}
+      }
+    }
+  ],
+  "outputs": {}
+}
