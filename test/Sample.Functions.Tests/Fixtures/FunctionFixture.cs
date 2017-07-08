@@ -43,7 +43,7 @@ namespace Sample.Functions.Tests.Fixtures
                 .Callback((LogLevel l, EventId e, object o, Exception ex, Func<object, Exception, string> f) => this.LogMessage.Critical = o.ToString());
 
             this.ServiceLocator = new Mock<IServiceLocator>();
-            this.ServiceLocator.Setup(p => p.GetInstance<JsonMediaTypeFormatter>()).Returns(new JsonMediaTypeFormatter());
+            this.ServiceLocator.Setup(p => p.GetInstance<MediaTypeFormatter>()).Returns(new JsonMediaTypeFormatter());
 
             this.FunctionAppSettings = new Mock<IFunctionAppSettings>();
         }
