@@ -1,0 +1,101 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a sample Swagger Example",
+    "version": "1.0.0",
+    "title": "ARM Templates on GitHub"
+  },
+  "host": "functions.io",
+  "basePath": "/mock",
+  "tags": [
+    {
+      "name": "template",
+      "description": "ARM Templates"
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/templates": {
+      "get": {
+        "tags": [
+          "template"
+        ],
+        "summary": "Gets ARM templates",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "q",
+            "description": "Query to filter ARM templates",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of ARM templates",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ContentModel"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "functionKey": []
+          },
+          {
+            "functionCode": []
+          }
+        ]
+      }
+    }
+  },
+  "securityDefinitions": {
+    "functionKey": {
+      "in": "header",
+      "type": "apiKey",
+      "name": "x-functions-key"
+    },
+    "functionCode": {
+      "in": "query",
+      "type": "apiKey",
+      "name": "code"
+    }
+  },
+  "definitions": {
+    "ContentModel": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "size": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "example": [
+        {
+          "name": "abc",
+          "url": "https://templates.io/abc",
+          "size": 0
+        },
+        {
+          "name": "xyz",
+          "url": "https://templates.io/xzy",
+          "size": 0
+        }
+      ]
+    }
+  }
+}
