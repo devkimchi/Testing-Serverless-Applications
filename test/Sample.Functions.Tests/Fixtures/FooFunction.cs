@@ -12,10 +12,6 @@ namespace Sample.Functions.Tests.Fixtures
     /// </summary>
     public interface IFooFunction : IFunction
     {
-        /// <summary>
-        /// Gets the <see cref="FooFunctionParameterOptions"/> instance.
-        /// </summary>
-        FooFunctionParameterOptions Parameters { get; }
     }
 
     /// <summary>
@@ -34,13 +30,8 @@ namespace Sample.Functions.Tests.Fixtures
     /// </summary>
     public class FooFunction : FunctionBase, IFooFunction
     {
-        /// <summary>
-        /// Gets the <see cref="FooFunctionParameterOptions"/> instance.
-        /// </summary>
-        public FooFunctionParameterOptions Parameters => this.ParameterOptions as FooFunctionParameterOptions;
-
         /// <inheritdoc />
-        public override Task<HttpResponseMessage> InvokeAsync(HttpRequestMessage req)
+        public override Task<HttpResponseMessage> InvokeAsync<TOptions>(HttpRequestMessage req, TOptions options = default(TOptions))
         {
             throw new NotImplementedException();
         }

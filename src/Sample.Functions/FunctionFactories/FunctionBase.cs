@@ -6,13 +6,11 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Threading.Tasks;
 
-using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Microsoft.Practices.ServiceLocation;
 
 using Sample.Extensions;
 using Sample.Functions.Extensions;
-using Sample.Functions.ParameterOptions;
 using Sample.Models.Functions.Responses;
 
 namespace Sample.Functions.FunctionFactories
@@ -36,29 +34,10 @@ namespace Sample.Functions.FunctionFactories
         /// </summary>
         public IServiceLocator ServiceLocator { get; set; }
 
-        /// <summary>
-        /// Gets or sets the <see cref="FunctionParameterOptions"/> instance.
-        /// </summary>
-        public FunctionParameterOptions ParameterOptions { protected get; set; }
-
-        /// <summary>
-        /// Invokes the function.
-        /// </summary>
-        /// <param name="req"><see cref="HttpRequestMessage"/> instance.</param>
-        /// <returns>Returns the <see cref="HttpResponseMessage"/> instance.</returns>
-        public virtual Task<HttpResponseMessage> InvokeAsync(HttpRequestMessage req)
+        /// <inheritdoc />
+        public virtual Task<HttpResponseMessage> InvokeAsync<TOptions>(HttpRequestMessage req, TOptions options = default(TOptions))
         {
             return null;
-        }
-
-        /// <summary>
-        /// Invokes the function.
-        /// </summary>
-        /// <param name="info"><see cref="TimerInfo"/> instance.</param>
-        /// <returns>Returns the <see cref="Task"/>.</returns>
-        public virtual Task InvokeAsync(TimerInfo info)
-        {
-            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -105,15 +84,6 @@ namespace Sample.Functions.FunctionFactories
         protected virtual void ReleaseUnmanagedResources()
         {
             // Release unmanaged resources here.
-        }
-
-        /// <summary>
-        /// Ensures whether the <see cref="FunctionParameterOptions"/> instance has been loaded or not.
-        /// </summary>
-        /// <returns>Returns <c>True</c>, if <see cref="FunctionParameterOptions"/> instance has been loaded; otherwise returns <c>False</c>.</returns>
-        protected bool EnsureParameterOptionsLoaded()
-        {
-            return !this.ParameterOptions.IsNullOrDefault();
         }
 
         /// <summary>

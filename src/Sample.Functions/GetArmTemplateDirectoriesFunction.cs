@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 
 using Sample.Extensions;
@@ -25,19 +24,11 @@ namespace Sample.Functions
             this._gitHubService = gitHubService.ThrowIfNullOrDefault();
         }
 
-        /// <summary>
-        /// Gets the <see cref="GetArmTemplateDirectoriesFunctionParameterOptions"/> instance.
-        /// </summary>
-        public GetArmTemplateDirectoriesFunctionParameterOptions Parameters => this.ParameterOptions as GetArmTemplateDirectoriesFunctionParameterOptions;
-
-        /// <summary>
-        /// Invokes the function.
-        /// </summary>
-        /// <param name="req"><see cref="HttpRequestMessage"/> instance.</param>
-        /// <returns>Returns the <see cref="HttpResponseMessage"/> instance.</returns>
-        public override async Task<HttpResponseMessage> InvokeAsync(HttpRequestMessage req)
+        /// <inheritdoc />
+        public override async Task<HttpResponseMessage> InvokeAsync<TOptions>(HttpRequestMessage req, TOptions options = default(TOptions))
         {
-            var directories = await this._gitHubService.GetArmTemplateDirectoriesAsync(this.Parameters.Query).ConfigureAwait(false);
+            var @params = options as GetArmTemplateDirectoriesFunctionParameterOptions;
+            var directories = await this._gitHubService.GetArmTemplateDirectoriesAsync(@params.Query).ConfigureAwait(false);
 
             return this.CreateOkResponse(req, directories);
         }

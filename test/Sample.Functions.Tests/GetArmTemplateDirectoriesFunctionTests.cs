@@ -9,6 +9,7 @@ using FluentAssertions;
 using Moq;
 
 using Sample.Extensions;
+using Sample.Functions.ParameterOptions;
 using Sample.Functions.Tests.Fixtures;
 using Sample.Models.Enums;
 using Sample.Models.GitHub;
@@ -60,11 +61,13 @@ namespace Sample.Functions.Tests
 
             this.Req = this.CreateRequest("http://localhost");
 
-            var function = this._fixture.ArrangeGetArmTemplateDirectoriesFunction(null, out Mock<IGitHubService> gitHubService);
+            var function = this._fixture.ArrangeGetArmTemplateDirectoriesFunction(out Mock<IGitHubService> gitHubService);
 
             gitHubService.Setup(p => p.GetArmTemplateDirectoriesAsync(It.IsAny<string>())).ReturnsAsync(models);
 
-            this.Res = await function.InvokeAsync(this.Req).ConfigureAwait(false);
+            var options = new GetArmTemplateDirectoriesFunctionParameterOptions();
+
+            this.Res = await function.InvokeAsync(this.Req, options).ConfigureAwait(false);
             this.Res.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var result = await this.Res.Content.ReadAsAsync<List<ContentModel>>().ConfigureAwait(false);
@@ -92,12 +95,14 @@ namespace Sample.Functions.Tests
 
             this.Req = this.CreateRequest($"http://localhost?q={query}");
 
-            var function = this._fixture.ArrangeGetArmTemplateDirectoriesFunction(query, out Mock<IGitHubService> gitHubService);
+            var function = this._fixture.ArrangeGetArmTemplateDirectoriesFunction(out Mock<IGitHubService> gitHubService);
 
             gitHubService.Setup(p => p.GetArmTemplateDirectoriesAsync(It.IsAny<string>()))
                          .ReturnsAsync(models.Where(p => p.Name.ContainsEquivalent(query)).ToList);
 
-            this.Res = await function.InvokeAsync(this.Req).ConfigureAwait(false);
+            var options = new GetArmTemplateDirectoriesFunctionParameterOptions() { Query = query };
+
+            this.Res = await function.InvokeAsync(this.Req, options).ConfigureAwait(false);
             this.Res.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var result = await this.Res.Content.ReadAsAsync<List<ContentModel>>().ConfigureAwait(false);

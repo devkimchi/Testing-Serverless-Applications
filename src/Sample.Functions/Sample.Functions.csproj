@@ -148,7 +148,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\FunctionExtensions.cs" />
     <Compile Include="Extensions\LoggerExtensions.cs" />
     <Compile Include="FunctionFactories\FunctionBase.cs" />
     <Compile Include="FunctionFactories\FunctionFactory.cs" />

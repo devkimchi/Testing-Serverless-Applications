@@ -9,6 +9,7 @@ using Moq;
 
 using Sample.FunctionApp.Tests.Fixtures;
 using Sample.Functions;
+using Sample.Functions.ParameterOptions;
 
 using Xunit;
 
@@ -45,7 +46,7 @@ namespace Sample.FunctionApp.Tests
 
             var factory = this._fixture.GetFunctionFactory(out Mock<IGetArmTemplateDirectoriesFunction> function);
 
-            function.Setup(p => p.InvokeAsync(It.IsAny<HttpRequestMessage>())).ReturnsAsync(this.Res);
+            function.Setup(p => p.InvokeAsync(It.IsAny<HttpRequestMessage>(), It.IsAny<FunctionParameterOptions>())).ReturnsAsync(this.Res);
 
             GetArmTemplateDirectoriesHttpTrigger.FunctionFactory = factory.Object;
 

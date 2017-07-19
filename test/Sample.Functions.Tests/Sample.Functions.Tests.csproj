@@ -183,7 +183,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\FunctionExtensionsTests.cs" />
     <Compile Include="Extensions\LoggerExtensionsTests.cs" />
     <Compile Include="Fixtures\AppModuleFixture.cs" />
     <Compile Include="Fixtures\FooFunction.cs" />

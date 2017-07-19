@@ -1,5 +1,4 @@
 ﻿using Sample.Functions.FunctionFactories;
-using Sample.Functions.ParameterOptions;
 
 namespace Sample.Functions
 {
@@ -8,9 +7,5 @@ namespace Sample.Functions
     /// </summary>
     public interface IGetArmTemplateDirectoriesFunction : IFunction
     {
-        /// <summary>
-        /// Gets the <see cref="GetArmTemplateDirectoriesFunctionParameterOptions"/> instance.
-        /// </summary>
-        GetArmTemplateDirectoriesFunctionParameterOptions Parameters { get; }
     }
 }

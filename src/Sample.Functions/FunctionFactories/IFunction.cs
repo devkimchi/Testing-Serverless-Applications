@@ -2,7 +2,6 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Microsoft.Practices.ServiceLocation;
 
@@ -26,22 +25,12 @@ namespace Sample.Functions.FunctionFactories
         IServiceLocator ServiceLocator { get; set; }
 
         /// <summary>
-        /// Sets the <see cref="FunctionParameterOptions"/> instance.
-        /// </summary>
-        FunctionParameterOptions ParameterOptions { set; }
-
-        /// <summary>
         /// Invokes the function.
         /// </summary>
+        /// <typeparam name="TOptions">Type of <see cref="FunctionParameterOptions"/>.</typeparam>
         /// <param name="req"><see cref="HttpRequestMessage"/> instance.</param>
+        /// <param name="options"><see cref="TOptions"/> instance.</param>
         /// <returns>Returns the <see cref="HttpResponseMessage"/> instance.</returns>
-        Task<HttpResponseMessage> InvokeAsync(HttpRequestMessage req);
-
-        /// <summary>
-        /// Invokes the function.
-        /// </summary>
-        /// <param name="info"><see cref="TimerInfo"/> instance.</param>
-        /// <returns>Returns the <see cref="Task"/>.</returns>
-        Task InvokeAsync(TimerInfo info);
+        Task<HttpResponseMessage> InvokeAsync<TOptions>(HttpRequestMessage req, TOptions options = default(TOptions));
     }
 }

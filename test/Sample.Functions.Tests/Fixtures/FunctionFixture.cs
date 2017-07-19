@@ -6,9 +6,7 @@ using Microsoft.Practices.ServiceLocation;
 
 using Moq;
 
-using Sample.Functions.Extensions;
 using Sample.Functions.FunctionFactories;
-using Sample.Functions.ParameterOptions;
 using Sample.Models.Settings;
 using Sample.Services;
 
@@ -76,15 +74,13 @@ namespace Sample.Functions.Tests.Fixtures
         /// <summary>
         /// Arranges the <see cref="IGetArmTemplateDirectoriesFunction"/> instance.
         /// </summary>
-        /// <param name="query">Query to filter out directories.</param>
         /// <param name="gitHubService"><see cref="Mock{IGitHubService}"/> instance.</param>
         /// <returns>Returns the <see cref="IGetArmTemplateDirectoriesFunction"/> instance.</returns>
-        public IGetArmTemplateDirectoriesFunction ArrangeGetArmTemplateDirectoriesFunction(string query, out Mock<IGitHubService> gitHubService)
+        public IGetArmTemplateDirectoriesFunction ArrangeGetArmTemplateDirectoriesFunction(out Mock<IGitHubService> gitHubService)
         {
             gitHubService = new Mock<IGitHubService>();
 
             var function = new GetArmTemplateDirectoriesFunction(gitHubService.Object)
-                               .AddParameters(new GetArmTemplateDirectoriesFunctionParameterOptions() { Query = query })
                                .SetLoggerToFixture(this.Log)
                                .SetServiceLocatorToFixture(this.ServiceLocator);
 

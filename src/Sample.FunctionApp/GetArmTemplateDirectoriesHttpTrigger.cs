@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 
 using Sample.Extensions;
 using Sample.Functions;
-using Sample.Functions.Extensions;
 using Sample.Functions.FunctionFactories;
 using Sample.Functions.ParameterOptions;
 
@@ -30,9 +29,9 @@ namespace Sample.FunctionApp
         /// <returns>Returns the <see cref="HttpResponseMessage"/> instance.</returns>
         public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, ILogger log)
         {
+            var options = new GetArmTemplateDirectoriesFunctionParameterOptions() { Query = GetQuery(req) };
             var res = await FunctionFactory.Create<IGetArmTemplateDirectoriesFunction>(log)
-                                           .AddParameters(new GetArmTemplateDirectoriesFunctionParameterOptions() { Query = GetQuery(req) })
-                                           .InvokeAsync(req)
+                                           .InvokeAsync(req, options)
                                            .ConfigureAwait(false);
             return res;
         }
