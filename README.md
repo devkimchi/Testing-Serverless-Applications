@@ -8,6 +8,11 @@ This provides sample codes to test serverless applications including Azure Funct
 * [Precompiled Azure Functions Revisited](https://github.com/devkimchi/Precompiled-Azure-Functions-Revisited)
 
 
+## Conference Talks ##
+
+* [DDD Sydney 2017](https://1drv.ms/p/s!ArWHNGHxF7lB6BStz2CBaUj90xqf)
+
+
 ## More Readings ##
 
 * 한국어
