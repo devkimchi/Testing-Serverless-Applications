@@ -18,7 +18,7 @@ This provides sample codes to test serverless applications including Azure Funct
 * 한국어
   * [Azure Functions 프리컴파일링 다시 보기](http://blog.aliencube.org/ko/2017/04/30/precompiled-azure-functions-revisited/)
   * [서버리스 애플리케이션 테스트하기 – 애저 펑션](http://blog.aliencube.org/ko/2017/07/20/testing-serverless-applications-part-1/)
-  * 서버리스 애플리케이션 테스트하기 - 애저 로직 앱
+  * [서버리스 애플리케이션 테스트하기 - 애저 로직 앱](http://blog.aliencube.org/ko/2017/07/21/testing-serverless-applications-part-2/)
 * English
   * [Testing Azure Functions in Emulated Environment with ScriptCs](https://blog.kloud.com.au/2016/09/05/testing-azure-functions-in-emulated-environment-with-scriptcs/)
   * [Testing Precompiled Azure Functions](https://blog.kloud.com.au/2017/01/20/testing-precompiled-azure-functions/)
