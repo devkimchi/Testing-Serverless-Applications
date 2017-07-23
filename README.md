@@ -23,8 +23,8 @@ This provides sample codes to test serverless applications including Azure Funct
   * [Testing Azure Functions in Emulated Environment with ScriptCs](https://blog.kloud.com.au/2016/09/05/testing-azure-functions-in-emulated-environment-with-scriptcs/)
   * [Testing Precompiled Azure Functions](https://blog.kloud.com.au/2017/01/20/testing-precompiled-azure-functions/)
   * [Azure Functions Precompiling Revisited](https://blog.kloud.com.au/2017/05/03/precompiled-azure-functions-revisited/)
-  * [Testing Serverless Applications - Azure Functions](https://blog.kloud.com.au/2017/07/22/is-your-serverless-application-testable-azure-functions/)
-  * [Testing Serverless Applications - Azure Logic Apps](https://blog.kloud.com.au/2017/07/24/is-your-serverless-application-testable-azure-logic-apps/)
+  * [Is Your Serverless Application Testable? – Azure Functions](https://blog.kloud.com.au/2017/07/22/is-your-serverless-application-testable-azure-functions/)
+  * [Is Your Serverless Application Testable? – Azure Logic Apps](https://blog.kloud.com.au/2017/07/24/is-your-serverless-application-testable-azure-logic-apps/)
 
 
 ## Contributions ##
