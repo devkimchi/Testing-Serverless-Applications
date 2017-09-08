@@ -3,7 +3,25 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "workflowName": {
-      "value": "wf-github-template-directory"
+      "value": "wf-spo-fileupload"
+    },
+    "connectionO365Name": {
+      "value": "office365"
+    },
+    "connectionSpoName": {
+      "value": "sharepointonline"
+    },
+    "connectionDisplayName": {
+      "value": ""
+    },
+    "spoSiteName": {
+      "value": ""
+    },
+    "spoUploadLocation": {
+      "value": ""
+    },
+    "o365Recipient": {
+      "value": ""
     }
   }
 }

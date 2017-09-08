@@ -6,10 +6,10 @@
       "value": "asp-functions"
     },
     "functionAppName": {
-      "value": "fn-github-template-directory"
+      "value": "fn-o365saturday-demo"
     },
     "functionAppStorageAccountName": {
-      "value": "sa0fn0log"
+      "value": "sa0o3650log"
     }
   }
 }

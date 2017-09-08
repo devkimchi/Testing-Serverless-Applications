@@ -34,136 +34,213 @@
       "metadata": {
         "description": "Location of the Logic App."
       }
+    },
+    "connectionO365Name": {
+      "type": "string",
+      "metadata": {
+        "description": "O365 connection name"
+      },
+      "defaultValue": "office365"
+    },
+    "connectionSpoName": {
+      "type": "string",
+      "metadata": {
+        "description": "SharePointOnline connection name"
+      },
+      "defaultValue": "sharepointonline"
+    },
+    "connectionDisplayName": {
+      "type": "string",
+      "metadata": {
+        "description": "Display name for connections"
+      }
+    },
+    "spoSiteName": {
+      "type": "string",
+      "metadata": {
+        "description": "SharePointOnline site name"
+      }
+    },
+    "spoUploadLocation": {
+      "type": "string",
+      "metadata": {
+        "description": "File upload location on SharePointOnline"
+      }
+    },
+    "o365Recipient": {
+      "type": "string",
+      "metadata": {
+        "description": "Email recipient"
+      }
     }
   },
-  "variables": {},
+  "variables": {
+    "spo": {
+      "siteName": "[concat('/datasets/@{encodeURIComponent(encodeURIComponent(''', parameters('spoSiteName'), '''))}', '/triggers/onupdatedfile')]",
+      "filePathToDelete": "[concat('/datasets/@{encodeURIComponent(encodeURIComponent(''', parameters('spoSiteName'), '''))}', '/files/@{encodeURIComponent(triggerOutputs()[''headers''][''x-ms-file-id''])}')]"
+    }
+  },
   "resources": [
     {
+      "apiVersion": "2016-06-01",
+      "name": "[parameters('connectionO365Name')]",
+      "type": "Microsoft.Web/connections",
+      "location": "[parameters('location')]",
+      "properties": {
+        "displayName": "[parameters('connectionDisplayName')]",
+        "api":{
+          "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('location'), '/managedApis/', parameters('connectionO365Name'))]"
+        }
+      },
+      "dependsOn": []
+    },
+    {
+      "apiVersion": "2016-06-01",
+      "name": "[parameters('connectionSpoName')]",
+      "type": "Microsoft.Web/connections",
+      "location": "[parameters('location')]",
+      "properties": {
+        "displayName": "[parameters('connectionDisplayName')]",
+        "api":{
+          "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('location'), '/managedApis/', parameters('connectionSpoName'))]"
+        }
+      },
+      "dependsOn": []
+    },
+    {
+      "apiVersion": "2016-06-01",
       "name": "[parameters('workflowName')]",
       "type": "Microsoft.Logic/workflows",
       "location": "[parameters('location')]",
       "tags": {
         "displayName": "[parameters('workflowName')]"
       },
-      "apiVersion": "2016-06-01",
       "properties": {
+        "parameters": {
+          "$connections": {
+            "value": {
+              "office365": {
+                "connectionId": "[resourceId('Microsoft.Web/connections', parameters('connectionO365Name'))]",
+                "connectionName": "[parameters('connectionO365Name')]",
+                "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('location'), '/managedApis/', parameters('connectionO365Name'))]"
+              },
+              "sharepointonline": {
+                "connectionId": "[resourceId('Microsoft.Web/connections', parameters('connectionSpoName'))]",
+                "connectionName": "[parameters('connectionSpoName')]",
+                "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('location'), '/managedApis/', parameters('connectionSpoName'))]"
+              }
+            }
+          }
+        },
         "definition": {
           "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
           "contentVersion": "1.0.0.0",
-          "parameters": {},
+          "parameters": {
+            "$connections": {
+              "defaultValue": {},
+              "type": "Object"
+            }
+          },
           "triggers": {
-            "manual": {
-              "type": "Request",
-              "kind": "Http",
+            "OnFileCreatedOrUpdatedInFolder": {
+              "type": "ApiConnection",
+              "recurrence": {
+                "frequency": "Minute",
+                "interval": 3
+              },
               "inputs": {
-                "method": "POST",
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "functionAppEndpointUri": {
-                      "type": "string"
-                    },
-                    "functionAppKey": {
-                      "type": "string"
-                    },
-                    "query": {
-                      "type": "string"
-                    }
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['sharepointonline']['connectionId']"
                   }
+                },
+                "method": "get",
+                "path": "[variables('spo').siteName]",
+                "queries": {
+                  "folderId": "[parameters('spoUploadLocation')]",
+                  "includeFileContent": true,
+                  "inferContentType": true
                 }
               }
             }
           },
           "actions": {
-            "HTTP": {
-              "type": "Http",
+            "SendEmailWithOptions": {
               "runAfter": {},
+              "type": "ApiConnectionWebhook",
               "inputs": {
-                "method": "GET",
-                "uri": "@{triggerBody()?['functionAppEndpointUri']}?q=@{triggerBody()?['query']}",
-                "headers": {
-                  "x-functions-key": "@{triggerBody()?['functionAppKey']}"
-                }
-              }
-            },
-            "ErrorResponse": {
-              "type": "Response",
-              "runAfter": {
-                "HTTP": [
-                  "Failed"
-                ]
-              },
-              "inputs": {
-                "statusCode": "@outputs('HTTP')['statusCode']",
-                "body": "@body('HTTP')"
-              }
-            },
-            "Parse_JSON": {
-              "type": "ParseJson",
-              "runAfter": {
-                "HTTP": [
-                  "Succeeded"
-                ]
-              },
-              "inputs": {
-                "content": "@body('HTTP')",
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "name": {
-                        "type": "string"
-                      },
-                      "url": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "name",
-                      "url"
-                    ]
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['office365']['connectionId']"
                   }
+                },
+                "path": "/mailwithoptions/$subscriptions",
+                "body": {
+                  "Message": {
+                    "Body": "@triggerOutputs()['headers']['x-ms-file-name']",
+                    "Importance": "Normal",
+                    "Options": "Leave it, Delete",
+                    "Subject": "A file was uploaded",
+                    "To": "[parameters('o365Recipient')]"
+                  },
+                  "NotificationUrl": "@{listCallbackUrl()}"
                 }
               }
             },
             "Condition": {
-              "type": "If",
               "runAfter": {
-                "Parse_JSON": [
+                "SendEmailWithOptions": [
                   "Succeeded"
                 ]
               },
-              "expression": "@greater(length(body('Parse_JSON')), 0)",
+              "type": "If",
+              "expression": "@equals(body('SendEmailWithOptions')?['SelectedOption'], 'Delete')",
               "actions": {
-                "OkResponse": {
-                  "type": "Response",
+                "DeleteFile": {
                   "runAfter": {},
+                  "type": "ApiConnection",
                   "inputs": {
-                    "statusCode": 200,
-                    "body": "@body('Parse_JSON')"
+                    "host": {
+                      "connection": {
+                        "name": "@parameters('$connections')['sharepointonline']['connectionId']"
+                      }
+                    },
+                    "method": "delete",
+                    "path": "[variables('spo').filePathToDelete]"
                   }
+                },
+                "OnDeletionSuccess": {
+                  "runAfter": {
+                    "DeleteFile": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "File Deleted"
+                },
+                "OnDeletionFail": {
+                  "runAfter": {
+                    "DeleteFile": [
+                      "Failed"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "@body('DeleteFile')"
                 }
               },
               "else": {
                 "actions": {
-                  "NotFoundResponse": {
-                    "type": "Response",
+                  "OnDoNothing": {
                     "runAfter": {},
-                    "inputs": {
-                      "statusCode": 404,
-                      "body": {
-                        "message": "Template not found"
-                      }
-                    }
+                    "type": "Compose",
+                    "inputs": "@body('SendEmailWithOptions')?['SelectedOption']"
                   }
                 }
               }
             }
           },
           "outputs": {}
-        },
-        "parameters": {}
+        }
       }
     }
   ],
