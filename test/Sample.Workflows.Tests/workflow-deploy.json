@@ -51,11 +51,11 @@
   "variables": {},
   "resources": [
     {
-      "name": "[concat(parameters('workflowName'), '-ok')]",
+      "name": "[concat(parameters('workflowName'), '-deleted-success')]",
       "type": "Microsoft.Logic/workflows",
       "location": "[parameters('location')]",
       "tags": {
-        "displayName": "[concat(parameters('workflowName'), '-ok')]"
+        "displayName": "[concat(parameters('workflowName'), '-deleted-success')]"
       },
       "apiVersion": "2016-06-01",
       "properties": {
@@ -65,105 +65,105 @@
           "parameters": {},
           "triggers": {
             "manual": {
-              "type": "Request",
-              "kind": "Http",
               "inputs": {
-                "method": "POST",
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "functionAppEndpointUri": {
-                      "type": "string"
-                    },
-                    "functionAppKey": {
-                      "type": "string"
-                    },
-                    "query": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
+                "schema": {}
+              },
+              "kind": "Http",
+              "type": "Request"
             }
           },
           "actions": {
-            "HTTP": {
-              "type": "Http",
+            "SendEmailWithOptionsMock": {
               "runAfter": {},
+              "type": "Http",
               "inputs": {
                 "method": "GET",
-                "uri": "[concat(parameters('functionAppBaseUri'), 'templates/ok?code=', parameters('functionAppKey'))]"
-              }
-            },
-            "ErrorResponse": {
-              "type": "Response",
-              "runAfter": {
-                "HTTP": [
-                  "Failed"
-                ]
-              },
-              "inputs": {
-                "statusCode": "@outputs('HTTP')['statusCode']",
-                "body": "@body('HTTP')"
-              }
-            },
-            "Parse_JSON": {
-              "type": "ParseJson",
-              "runAfter": {
-                "HTTP": [
-                  "Succeeded"
-                ]
-              },
-              "inputs": {
-                "content": "@body('HTTP')",
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "name": {
-                        "type": "string"
-                      },
-                      "url": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "name",
-                      "url"
-                    ]
-                  }
+                "uri": "[concat(parameters('functionAppBaseUri'), 'send-email-with-options-of-delete')]",
+                "headers": {
+                  "x-functions-key": "[parameters('functionAppKey')]"
                 }
               }
             },
             "Condition": {
-              "type": "If",
               "runAfter": {
-                "Parse_JSON": [
+                "SendEmailWithOptionsMock": [
                   "Succeeded"
                 ]
               },
-              "expression": "@greater(length(body('Parse_JSON')), 0)",
+              "type": "If",
+              "expression": "@equals(body('SendEmailWithOptionsMock'), 'Delete')",
               "actions": {
-                "OkResponse": {
-                  "type": "Response",
+                "DeleteFileMock": {
                   "runAfter": {},
+                  "type": "Http",
                   "inputs": {
-                    "statusCode": 200,
-                    "body": "@body('Parse_JSON')"
+                    "method": "GET",
+                    "uri": "[concat(parameters('functionAppBaseUri'), 'delete-file-success')]",
+                    "headers": {
+                      "x-functions-key": "[parameters('functionAppKey')]"
+                    }
+                  }
+                },
+                "OnDeletionSuccess": {
+                  "runAfter": {
+                    "DeleteFileMock": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "File Deleted"
+                },
+                "OnDeletionFail": {
+                  "runAfter": {
+                    "DeleteFileMock": [
+                      "Failed"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "@body('DeleteFileMock')"
+                },
+                "MockResponseOnDeletionSuccess": {
+                  "runAfter": {
+                    "OnDeletionSuccess": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Response",
+                  "inputs": {
+                    "body": "@outputs('OnDeletionSuccess')",
+                    "statusCode": "@outputs('DeleteFileMock')['statusCode']"
+                  }
+                },
+                "MockResponseOnDeletionFail": {
+                  "runAfter": {
+                    "OnDeletionFail": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Response",
+                  "inputs": {
+                    "body": "@outputs('OnDeletionFail')",
+                    "statusCode": "@outputs('DeleteFileMock')['statusCode']"
                   }
                 }
               },
               "else": {
                 "actions": {
-                  "NotFoundResponse": {
-                    "type": "Response",
+                  "OnDoNothing": {
                     "runAfter": {},
+                    "type": "Compose",
+                    "inputs": "@body('SendEmailWithOptionsMock')"
+                  },
+                  "MockResponseOnDoNothing": {
+                    "runAfter": {
+                      "OnDoNothing": [
+                        "Succeeded"
+                      ]
+                    },
+                    "type": "Response",
                     "inputs": {
-                      "statusCode": 404,
-                      "body": {
-                        "message": "Template not found"
-                      }
+                      "body": "@outputs('OnDoNothing')",
+                      "statusCode": 200
                     }
                   }
                 }
@@ -176,11 +176,11 @@
       }
     },
     {
-      "name": "[concat(parameters('workflowName'), '-notfound')]",
+      "name": "[concat(parameters('workflowName'), '-deleted-fail')]",
       "type": "Microsoft.Logic/workflows",
       "location": "[parameters('location')]",
       "tags": {
-        "displayName": "[concat(parameters('workflowName'), '-notfound')]"
+        "displayName": "[concat(parameters('workflowName'), '-deleted-fail')]"
       },
       "apiVersion": "2016-06-01",
       "properties": {
@@ -190,105 +190,105 @@
           "parameters": {},
           "triggers": {
             "manual": {
-              "type": "Request",
-              "kind": "Http",
               "inputs": {
-                "method": "POST",
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "functionAppEndpointUri": {
-                      "type": "string"
-                    },
-                    "functionAppKey": {
-                      "type": "string"
-                    },
-                    "query": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
+                "schema": {}
+              },
+              "kind": "Http",
+              "type": "Request"
             }
           },
           "actions": {
-            "HTTP": {
-              "type": "Http",
+            "SendEmailWithOptionsMock": {
               "runAfter": {},
+              "type": "Http",
               "inputs": {
                 "method": "GET",
-                "uri": "[concat(parameters('functionAppBaseUri'), 'templates/notfound?code=', parameters('functionAppKey'))]"
-              }
-            },
-            "ErrorResponse": {
-              "type": "Response",
-              "runAfter": {
-                "HTTP": [
-                  "Failed"
-                ]
-              },
-              "inputs": {
-                "statusCode": "@outputs('HTTP')['statusCode']",
-                "body": "@body('HTTP')"
-              }
-            },
-            "Parse_JSON": {
-              "type": "ParseJson",
-              "runAfter": {
-                "HTTP": [
-                  "Succeeded"
-                ]
-              },
-              "inputs": {
-                "content": "@body('HTTP')",
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "name": {
-                        "type": "string"
-                      },
-                      "url": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "name",
-                      "url"
-                    ]
-                  }
+                "uri": "[concat(parameters('functionAppBaseUri'), 'send-email-with-options-of-delete')]",
+                "headers": {
+                  "x-functions-key": "[parameters('functionAppKey')]"
                 }
               }
             },
             "Condition": {
-              "type": "If",
               "runAfter": {
-                "Parse_JSON": [
+                "SendEmailWithOptionsMock": [
                   "Succeeded"
                 ]
               },
-              "expression": "@greater(length(body('Parse_JSON')), 0)",
+              "type": "If",
+              "expression": "@equals(body('SendEmailWithOptionsMock'), 'Delete')",
               "actions": {
-                "OkResponse": {
-                  "type": "Response",
+                "DeleteFileMock": {
                   "runAfter": {},
+                  "type": "Http",
                   "inputs": {
-                    "statusCode": 200,
-                    "body": "@body('Parse_JSON')"
+                    "method": "GET",
+                    "uri": "[concat(parameters('functionAppBaseUri'), 'delete-file-fail')]",
+                    "headers": {
+                      "x-functions-key": "[parameters('functionAppKey')]"
+                    }
+                  }
+                },
+                "OnDeletionSuccess": {
+                  "runAfter": {
+                    "DeleteFileMock": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "File Deleted"
+                },
+                "OnDeletionFail": {
+                  "runAfter": {
+                    "DeleteFileMock": [
+                      "Failed"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "@body('DeleteFileMock')"
+                },
+                "MockResponseOnDeletionSuccess": {
+                  "runAfter": {
+                    "OnDeletionSuccess": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Response",
+                  "inputs": {
+                    "body": "@outputs('OnDeletionSuccess')",
+                    "statusCode": "@outputs('DeleteFileMock')['statusCode']"
+                  }
+                },
+                "MockResponseOnDeletionFail": {
+                  "runAfter": {
+                    "OnDeletionFail": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Response",
+                  "inputs": {
+                    "body": "@outputs('OnDeletionFail')",
+                    "statusCode": "@outputs('DeleteFileMock')['statusCode']"
                   }
                 }
               },
               "else": {
                 "actions": {
-                  "NotFoundResponse": {
-                    "type": "Response",
+                  "OnDoNothing": {
                     "runAfter": {},
+                    "type": "Compose",
+                    "inputs": "@body('SendEmailWithOptionsMock')"
+                  },
+                  "MockResponseOnDoNothing": {
+                    "runAfter": {
+                      "OnDoNothing": [
+                        "Succeeded"
+                      ]
+                    },
+                    "type": "Response",
                     "inputs": {
-                      "statusCode": 404,
-                      "body": {
-                        "message": "Template not found"
-                      }
+                      "body": "@outputs('OnDoNothing')",
+                      "statusCode": 200
                     }
                   }
                 }
@@ -301,11 +301,11 @@
       }
     },
     {
-      "name": "[concat(parameters('workflowName'), '-error')]",
+      "name": "[concat(parameters('workflowName'), '-do-nothing')]",
       "type": "Microsoft.Logic/workflows",
       "location": "[parameters('location')]",
       "tags": {
-        "displayName": "[concat(parameters('workflowName'), '-error')]"
+        "displayName": "[concat(parameters('workflowName'), '-do-nothing')]"
       },
       "apiVersion": "2016-06-01",
       "properties": {
@@ -315,105 +315,105 @@
           "parameters": {},
           "triggers": {
             "manual": {
-              "type": "Request",
-              "kind": "Http",
               "inputs": {
-                "method": "POST",
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "functionAppEndpointUri": {
-                      "type": "string"
-                    },
-                    "functionAppKey": {
-                      "type": "string"
-                    },
-                    "query": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
+                "schema": {}
+              },
+              "kind": "Http",
+              "type": "Request"
             }
           },
           "actions": {
-            "HTTP": {
-              "type": "Http",
+            "SendEmailWithOptionsMock": {
               "runAfter": {},
+              "type": "Http",
               "inputs": {
                 "method": "GET",
-                "uri": "[concat(parameters('functionAppBaseUri'), 'templates/error?code=', parameters('functionAppKey'))]"
-              }
-            },
-            "ErrorResponse": {
-              "type": "Response",
-              "runAfter": {
-                "HTTP": [
-                  "Failed"
-                ]
-              },
-              "inputs": {
-                "statusCode": "@outputs('HTTP')['statusCode']",
-                "body": "@body('HTTP')"
-              }
-            },
-            "Parse_JSON": {
-              "type": "ParseJson",
-              "runAfter": {
-                "HTTP": [
-                  "Succeeded"
-                ]
-              },
-              "inputs": {
-                "content": "@body('HTTP')",
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "name": {
-                        "type": "string"
-                      },
-                      "url": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "name",
-                      "url"
-                    ]
-                  }
+                "uri": "[concat(parameters('functionAppBaseUri'), 'send-email-with-options-of-leave-it')]",
+                "headers": {
+                  "x-functions-key": "[parameters('functionAppKey')]"
                 }
               }
             },
             "Condition": {
-              "type": "If",
               "runAfter": {
-                "Parse_JSON": [
+                "SendEmailWithOptionsMock": [
                   "Succeeded"
                 ]
               },
-              "expression": "@greater(length(body('Parse_JSON')), 0)",
+              "type": "If",
+              "expression": "@equals(body('SendEmailWithOptionsMock'), 'Delete')",
               "actions": {
-                "OkResponse": {
-                  "type": "Response",
+                "DeleteFileMock": {
                   "runAfter": {},
+                  "type": "Http",
                   "inputs": {
-                    "statusCode": 200,
-                    "body": "@body('Parse_JSON')"
+                    "method": "GET",
+                    "uri": "[concat(parameters('functionAppBaseUri'), 'delete-file-success')]",
+                    "headers": {
+                      "x-functions-key": "[parameters('functionAppKey')]"
+                    }
+                  }
+                },
+                "OnDeletionSuccess": {
+                  "runAfter": {
+                    "DeleteFileMock": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "File Deleted"
+                },
+                "OnDeletionFail": {
+                  "runAfter": {
+                    "DeleteFileMock": [
+                      "Failed"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "@body('DeleteFileMock')"
+                },
+                "MockResponseOnDeletionSuccess": {
+                  "runAfter": {
+                    "OnDeletionSuccess": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Response",
+                  "inputs": {
+                    "body": "@outputs('OnDeletionSuccess')",
+                    "statusCode": "@outputs('DeleteFileMock')['statusCode']"
+                  }
+                },
+                "MockResponseOnDeletionFail": {
+                  "runAfter": {
+                    "OnDeletionFail": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Response",
+                  "inputs": {
+                    "body": "@outputs('OnDeletionFail')",
+                    "statusCode": "@outputs('DeleteFileMock')['statusCode']"
                   }
                 }
               },
               "else": {
                 "actions": {
-                  "NotFoundResponse": {
-                    "type": "Response",
+                  "OnDoNothing": {
                     "runAfter": {},
+                    "type": "Compose",
+                    "inputs": "@body('SendEmailWithOptionsMock')"
+                  },
+                  "MockResponseOnDoNothing": {
+                    "runAfter": {
+                      "OnDoNothing": [
+                        "Succeeded"
+                      ]
+                    },
+                    "type": "Response",
                     "inputs": {
-                      "statusCode": 404,
-                      "body": {
-                        "message": "Template not found"
-                      }
+                      "body": "@outputs('OnDoNothing')",
+                      "statusCode": 200
                     }
                   }
                 }

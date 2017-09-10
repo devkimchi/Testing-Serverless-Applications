@@ -3,10 +3,10 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "workflowName": {
-      "value": "wf-github-template-directory"
+      "value": "wf-spo-fileupload"
     },
     "functionAppBaseUri": {
-      "value": "https://fn-github-template-directory.azurewebsites.net/api/mock/"
+      "value": "https://fn-o365saturday-demo.azurewebsites.net/api/mock/"
     },
     "functionAppKey": {
       "value": ""
