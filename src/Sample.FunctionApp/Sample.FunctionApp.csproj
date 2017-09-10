@@ -23,6 +23,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -182,6 +183,14 @@
     <Content Include="MockTemplateDirectoriesHttpTriggerOk\function.json" />
     <Content Include="MockTemplateDirectoriesHttpTriggerError\function.json" />
     <Content Include="MockTemplateDirectoriesHttpTriggerNotFound\function.json" />
+    <Content Include="MockDeleteFileFailHttpTrigger\function.json" />
+    <Content Include="MockDeleteFileSuccessHttpTrigger\function.json" />
+    <Content Include="MockSendEmailWithOptionsOfDeleteHttpTrigger\function.json" />
+    <Content Include="MockSendEmailWithOptionsOfLeaveItHttpTrigger\function.json" />
+    <None Include="Properties\PublishProfiles\fn-github-template-directory - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\fn-github-template-directory - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\fn-o365saturday-demo - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\fn-o365saturday-demo - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -196,6 +205,10 @@
     <Compile Include="GetArmTemplateDirectoriesHttpTriggerWithServiceLocator.cs" />
     <Compile Include="GetArmTemplateDirectoriesHttpTriggerWithoutDi.cs" />
     <Compile Include="GetArmTemplateDirectoriesHttpTrigger.cs" />
+    <Compile Include="MockDeleteFileFailHttpTrigger.cs" />
+    <Compile Include="MockDeleteFileSuccessHttpTrigger.cs" />
+    <Compile Include="MockSendEmailWithOptionsOfDeleteHttpTrigger.cs" />
+    <Compile Include="MockSendEmailWithOptionsOfLeaveItHttpTrigger.cs" />
     <Compile Include="MockTemplateDirectoriesHttpTriggerError.cs" />
     <Compile Include="MockTemplateDirectoriesHttpTriggerNotFound.cs" />
     <Compile Include="MockTemplateDirectoriesHttpTriggerOk.cs" />

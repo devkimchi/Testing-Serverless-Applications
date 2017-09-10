@@ -1,0 +1,24 @@
+﻿{
+  "disabled": false,
+
+  "scriptFile": "..\\bin\\Sample.FunctionApp.dll",
+  "entryPoint": "Sample.FunctionApp.MockSendEmailWithOptionsOfDeleteHttpTrigger.Run",
+
+  "bindings": [
+    {
+      "name": "req",
+      "type": "httpTrigger",
+      "direction": "in",
+      "route": "mock/send-email-with-options-of-delete",
+      "authLevel": "function",
+      "methods": [
+        "get"
+      ]
+    },
+    {
+      "name": "return",
+      "type": "http",
+      "direction": "out"
+    }
+  ]
+}
