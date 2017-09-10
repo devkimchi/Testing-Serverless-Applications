@@ -22,7 +22,7 @@ namespace Sample.FunctionApp
         {
             var ex = new Exception("Mocked Exception");
 
-            return req.CreateResponse(HttpStatusCode.InternalServerError, new { message = ex.Message });
+            return req.CreateResponse(HttpStatusCode.BadRequest, new { message = ex.Message });
         }
     }
 }

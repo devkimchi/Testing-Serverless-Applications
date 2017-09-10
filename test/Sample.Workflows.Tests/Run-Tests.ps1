@@ -1,44 +1,28 @@
 ﻿Param(
-    [string] [Parameter(Mandatory=$true)] $OkUri,
-    [string] [Parameter(Mandatory=$true)] $NotFoundUri,
-    [string] [Parameter(Mandatory=$true)] $ErrorUri
+    [string] [Parameter(Mandatory=$true)] $FileDeleteSuccessUrl,
+    [string] [Parameter(Mandatory=$true)] $FileDeleteFailUrl,
+    [string] [Parameter(Mandatory=$true)] $DoNothingUrl
 )
 
 $exitCode = 0
 
-$result = Invoke-WebRequest -Method Post -Uri $OkUri
+Write-Host "Testing File Deletion Success..." -ForegroundColor Green
+
+$result = Invoke-WebRequest -Method Post -Uri $FileDeleteSuccessUrl
 if ($result.StatusCode -ne 200)
 {
-  Write-Host "OK test failed"
+  Write-Host "File Delete Success test failed"
   $exitCode++
 }
 
-try
-{
-  $result = Invoke-WebRequest -Method Post -Uri $NotFoundUri
-  if ($result.StatusCode -ne 404)
-  {
-    Write-Host "Not Found test failed"
-    $exitCode++
-  }
-}
-catch
-{
-  $result = ([System.Net.WebException]$_.Exception).Response
-  if ([int]$result.StatusCode -ne 404)
-  {
-    Write-Host "Not Found test failed"
-    $exitCode++
-  }
-
-}
+Write-Host "Testing File Deletion Fail..." -ForegroundColor Green
 
 try
 {
-  $result = Invoke-WebRequest -Method Post -Uri $ErrorUri
+  $result = Invoke-WebRequest -Method Post -Uri $FileDeleteFailUrl
   if ($result.StatusCode -lt 400)
   {
-    Write-Host "Error test failed"
+    Write-Host "File Delete Fail test failed"
     $exitCode++
   }
 }
@@ -47,9 +31,19 @@ catch
   $result = ([System.Net.WebException]$_.Exception).Response
   if ([int]$result.StatusCode -lt 400)
   {
-    Write-Host "Error test failed"
+    Write-Host "File Delete Fail test failed"
     $exitCode++
   }
+
+}
+
+Write-Host "Testing Do Nothing..." -ForegroundColor Green
+
+$result = Invoke-WebRequest -Method Post -Uri $FileDeleteSuccessUrl
+if ($result.StatusCode -ne 200)
+{
+  Write-Host "Do Nothing test failed"
+  $exitCode++
 }
 
 if ($exitCode -gt 0)
@@ -57,7 +51,7 @@ if ($exitCode -gt 0)
   $host.SetShouldExit($exitCode)
 }
 
-Write-Host "All tests passed"
+Write-Host "All tests passed" -ForegroundColor Green
 
 Remove-Variable result
 Remove-Variable exitCode
