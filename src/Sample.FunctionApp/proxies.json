@@ -1,0 +1,70 @@
+{
+    "$schema": "http://json.schemastore.org/proxies",
+    "proxies": {
+        "mock/delete-file-success": {
+            "matchCondition": {
+                "route": "mock/delete-file-success",
+                "methods": [
+                    "GET"
+                ]
+            },
+            "responseOverrides": {
+                "response.statusCode": "200"
+            }
+        },
+        "mock/delete-file-fail": {
+            "matchCondition": {
+                "route": "mock/delete-file-fail"
+            },
+            "responseOverrides": {
+                "response.statusCode": "400",
+                "response.body": "{\r\n  \"message\": \"Mocked Exception\"\r\n}"
+            }
+        },
+        "mock/send-email-with-options-of-delete": {
+            "matchCondition": {
+                "route": "mock/send-email-with-options-of-delete",
+                "methods": [
+                    "GET"
+                ]
+            },
+            "responseOverrides": {
+                "response.statusCode": "200",
+                "response.body": "Delete"
+            }
+        },
+        "mock/send-email-with-options-of-leave-it": {
+            "matchCondition": {
+                "route": "mock/send-email-with-options-of-leave-it",
+                "methods": [
+                    "GET"
+                ]
+            },
+            "responseOverrides": {
+                "response.statusCode": "200",
+                "response.body": "Leave it"
+            }
+        },
+        "mock/test": {
+            "matchCondition": {
+                "route": "mock/test"
+            },
+            "responseOverrides": {
+                "response.statusCode": "201",
+                "response.body": "{\r\n  \"message\": \"Accepted\"\r\n}"
+            }
+        },
+        "mock/hello-world": {
+            "matchCondition": {
+                "route": "mock/hello-world",
+                "methods": [
+                    "GET"
+                ]
+            },
+            "responseOverrides": {
+                "response.statusCode": "200",
+                "response.body": "{\r\n  \"message\": \"Hello World\"\r\n}"
+            }
+        }
+    }
+}

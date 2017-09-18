@@ -128,7 +128,9 @@
             "GithubApiBaseUri": "https://api.github.com/",
             "GitHubRepositoryContentUri": "repos/{0}/{1}/contents",
             "GitHubAzureUsername": "Azure",
-            "GitHubAzureQuickstartTemplatesRepository": "azure-quickstart-templates"
+            "GitHubAzureQuickstartTemplatesRepository": "azure-quickstart-templates",
+            "AzureWebJobsSecretStorageType": "disabled",
+            "ROUTING_EXTENSION_VERSION": "~0.2"
           }
         },
         {

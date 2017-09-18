@@ -182,6 +182,7 @@
     <Content Include="MockTemplateDirectoriesHttpTriggerOk\function.json" />
     <Content Include="MockTemplateDirectoriesHttpTriggerError\function.json" />
     <Content Include="MockTemplateDirectoriesHttpTriggerNotFound\function.json" />
+    <Content Include="proxies.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
