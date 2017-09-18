@@ -15,6 +15,12 @@ if ($result.StatusCode -ne 200)
   $exitCode++
 }
 
+if ($exitCode -gt 0)
+{
+  $host.SetShouldExit($exitCode)
+  return
+}
+
 Write-Host "Testing File Deletion Fail..." -ForegroundColor Green
 
 try
@@ -37,6 +43,12 @@ catch
 
 }
 
+if ($exitCode -gt 0)
+{
+  $host.SetShouldExit($exitCode)
+  return
+}
+
 Write-Host "Testing Do Nothing..." -ForegroundColor Green
 
 $result = Invoke-WebRequest -Method Post -Uri $FileDeleteSuccessUrl
@@ -49,6 +61,7 @@ if ($result.StatusCode -ne 200)
 if ($exitCode -gt 0)
 {
   $host.SetShouldExit($exitCode)
+  return
 }
 
 Write-Host "All tests passed" -ForegroundColor Green
