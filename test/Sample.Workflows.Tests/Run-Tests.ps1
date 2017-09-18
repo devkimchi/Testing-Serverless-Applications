@@ -6,12 +6,22 @@
 
 $exitCode = 0
 
+Write-Host "Testing OK..."
+
 $result = Invoke-WebRequest -Method Post -Uri $OkUri
 if ($result.StatusCode -ne 200)
 {
   Write-Host "OK test failed"
   $exitCode++
 }
+
+if ($exitCode -gt 0)
+{
+  $host.SetShouldExit($exitCode)
+  return
+}
+
+Write-Host "Testing Not Found..."
 
 try
 {
@@ -32,6 +42,14 @@ catch
   }
 
 }
+
+if ($exitCode -gt 0)
+{
+  $host.SetShouldExit($exitCode)
+  return
+}
+
+Write-Host "Testing Error..."
 
 try
 {
@@ -55,6 +73,7 @@ catch
 if ($exitCode -gt 0)
 {
   $host.SetShouldExit($exitCode)
+  return
 }
 
 Write-Host "All tests passed"
